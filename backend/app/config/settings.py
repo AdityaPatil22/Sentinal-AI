@@ -1,0 +1,43 @@
+from functools import lru_cache
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    app_env: str = "development"
+    app_debug: bool = False
+    app_name: str = "sentinel-ai"
+
+    backend_host: str = "0.0.0.0"
+    backend_port: int = 8000
+
+    secret_key: str = "change-me-in-production"
+    algorithm: str = "HS256"
+    access_token_expire_minutes: int = 30
+    refresh_token_expire_days: int = 7
+
+    database_url: str = "postgresql+asyncpg://sentinel:sentinel@localhost:5432/sentinel_ai"
+
+    redis_url: str = "redis://localhost:6379/0"
+
+    storage_backend: str = "local"
+    storage_local_path: str = "./storage"
+
+    @property
+    def is_development(self) -> bool:
+        return self.app_env == "development"
+
+    @property
+    def is_production(self) -> bool:
+        return self.app_env == "production"
+
+    @property
+    def database_url_sync(self) -> str:
+        return self.database_url.replace("+asyncpg", "+psycopg2")
+
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()

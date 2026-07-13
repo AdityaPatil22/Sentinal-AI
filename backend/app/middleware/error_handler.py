@@ -1,0 +1,22 @@
+from fastapi import Request
+from fastapi.responses import ORJSONResponse
+
+from app.core.exceptions import AppError
+from app.core.logging import get_logger
+
+logger = get_logger(__name__)
+
+
+async def app_exception_handler(_request: Request, exc: AppError) -> ORJSONResponse:
+    return ORJSONResponse(
+        status_code=exc.status_code,
+        content={"success": False, "message": exc.message, "errors": exc.errors},
+    )
+
+
+async def unhandled_exception_handler(_request: Request, exc: Exception) -> ORJSONResponse:
+    logger.exception("Unhandled exception: %s", exc)
+    return ORJSONResponse(
+        status_code=500,
+        content={"success": False, "message": "Internal server error", "errors": []},
+    )
