@@ -26,6 +26,9 @@ frontend/dist/
 *.swo
 *~
 
+# Obsidian vault (personal)
+sentinal-ai-vault/
+
 # OS
 .DS_Store
 Thumbs.db
