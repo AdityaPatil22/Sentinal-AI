@@ -3,12 +3,16 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
+from sqlalchemy import select
 
 from app.api.v1 import router as v1_router
 from app.config import get_settings
 from app.core.exceptions import AppError
 from app.core.logging import setup_logging
+from app.db.base import Base
+from app.db.session import async_session, engine
 from app.middleware.error_handler import app_exception_handler, unhandled_exception_handler
+from app.models.user import Role, RoleEnum
 
 settings = get_settings()
 
@@ -16,6 +20,14 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     setup_logging("DEBUG" if settings.app_debug else "INFO")
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    async with async_session() as db:
+        for role_name in RoleEnum:
+            exists = (await db.execute(select(Role).where(Role.name == role_name))).scalar_one_or_none()
+            if not exists:
+                db.add(Role(name=role_name, description=f"{role_name.value} role"))
+        await db.commit()
     yield
 
 
