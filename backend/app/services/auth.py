@@ -25,9 +25,9 @@ class AuthService:
         existing = await self.user_repo.get_by_email(data.email)
         if existing:
             raise BadRequestError("Email already registered")
-        role = (await self.user_repo.db.execute(
-            select(Role).where(Role.name == RoleEnum.DEVELOPER)
-        )).scalar_one_or_none()
+        role = (
+            await self.user_repo.db.execute(select(Role).where(Role.name == RoleEnum.DEVELOPER))
+        ).scalar_one_or_none()
         if not role:
             raise BadRequestError("Default role not configured. Run the seed script first.")
         user = User(

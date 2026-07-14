@@ -24,9 +24,7 @@ class Report(Base, UUIDMixin, TimestampMixin):
     __tablename__ = "reports"
 
     content: Mapped[str | None] = mapped_column(Text)
-    status: Mapped[str] = mapped_column(
-        Enum(ReportStatus), default=ReportStatus.DRAFT, nullable=False
-    )
+    status: Mapped[str] = mapped_column(Enum(ReportStatus), default=ReportStatus.DRAFT, nullable=False)
 
     evaluation_id: Mapped[str] = mapped_column(
         UUID(as_uuid=True), ForeignKey("evaluations.id"), unique=True, nullable=False

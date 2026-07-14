@@ -32,4 +32,5 @@ def require_roles(*roles: str):
         if current_user.role.name not in roles:
             raise ForbiddenError("Insufficient permissions")
         return current_user
+
     return check_role
