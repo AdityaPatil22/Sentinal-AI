@@ -10,6 +10,12 @@ export interface ApiError {
   errors: unknown[];
 }
 
+export interface AuthTokens {
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+}
+
 export interface User {
   id: string;
   email: string;
@@ -18,8 +24,55 @@ export interface User {
   is_active: boolean;
 }
 
-export interface AuthTokens {
-  access_token: string;
-  refresh_token: string;
-  token_type: string;
+export type ProjectStatus = "draft" | "submitted" | "evaluating" | "evaluated" | "approved" | "rejected";
+export type EvaluationStatus = "pending" | "running" | "completed" | "failed";
+export type ReportStatus = "draft" | "published" | "archived";
+
+export interface Project {
+  id: string;
+  name: string;
+  description: string | null;
+  status: ProjectStatus;
+  owner_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Evaluation {
+  id: string;
+  status: EvaluationStatus;
+  risk_score: number | null;
+  summary: string | null;
+  model_name: string | null;
+  project_id: string;
+  created_at: string;
+  updated_at: string;
+  project?: Project;
+}
+
+export interface Report {
+  id: string;
+  content: string | null;
+  status: ReportStatus;
+  evaluation_id: string;
+  reviewer_id: string | null;
+  created_at: string;
+  updated_at: string;
+  evaluation?: Evaluation;
+}
+
+export interface Dataset {
+  id: string;
+  name: string;
+  description: string | null;
+  file_path: string | null;
+  record_count: number | null;
+  project_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateProjectRequest {
+  name: string;
+  description?: string;
 }
