@@ -30,7 +30,6 @@ See [docs/Architecture.md](docs/Architecture.md) for system design.
 |-------|-------|
 | Frontend | React, TypeScript, Vite, TailwindCSS, shadcn/ui |
 | Backend | Python 3.12, FastAPI, SQLAlchemy 2, Pydantic v2 |
-| AI | LangGraph, LiteLLM, OpenAI SDK |
+| AI | LangGraph, Google Gemini |
 | Database | PostgreSQL 16 |
-| Cache | Redis 7 |
 | Auth | JWT + RBAC |

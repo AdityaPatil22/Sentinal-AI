@@ -1,10 +1,18 @@
+from __future__ import annotations
+
 import enum
+import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Enum, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, TimestampMixin, UUIDMixin
+
+if TYPE_CHECKING:
+    from app.models.project import Project
+    from app.models.report import Report
 
 
 class RoleEnum(enum.StrEnum):
@@ -30,5 +38,8 @@ class User(Base, UUIDMixin, TimestampMixin):
     full_name: Mapped[str] = mapped_column(String(255), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
 
-    role_id: Mapped[str] = mapped_column(UUID(as_uuid=True), ForeignKey("roles.id"), nullable=False)
+    role_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("roles.id"), nullable=False)
     role: Mapped["Role"] = relationship(back_populates="users")
+
+    owned_projects: Mapped[list["Project"]] = relationship(back_populates="owner")
+    reviewed_reports: Mapped[list["Report"]] = relationship(back_populates="reviewer")

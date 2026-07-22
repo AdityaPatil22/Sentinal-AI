@@ -4,10 +4,9 @@ AI governance platform for evaluating LLM applications before deployment.
 
 ## Stack
 
-- **Backend**: Python 3.12, FastAPI, SQLAlchemy (async), Neon Postgres (asyncpg), LangGraph, LiteLLM
+- **Backend**: Python 3.12, FastAPI, SQLAlchemy (async), Neon Postgres (asyncpg), LangGraph, Google Gemini
 - **Frontend**: React 19, TypeScript, Vite 6, Tailwind CSS v4, Zustand 5, React Query 5, React Router 7
-- **Infra**: Podman (not Docker), Neon Postgres (remote), Redis
-
+- **Infra**: Podman (not Docker), Neon Postgres (remote)
 ## Repo layout
 
 ```
@@ -89,7 +88,7 @@ podman-compose up
 
 ## Env vars (.env at repo root)
 
-DATABASE_URL, REDIS_URL, SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS, ALGORITHM, VITE_API_URL, OPENAI_API_KEY, LITELLM_API_KEY, STORAGE_BACKEND, STORAGE_LOCAL_PATH
+DATABASE_URL, SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS, ALGORITHM, VITE_API_URL, GEMINI_API_KEY, STORAGE_BACKEND, STORAGE_LOCAL_PATH
 
 ## Known issues
 

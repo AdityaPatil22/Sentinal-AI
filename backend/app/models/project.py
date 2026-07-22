@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import enum
+import uuid
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Enum, ForeignKey, String, Text
@@ -31,8 +32,8 @@ class Project(Base, UUIDMixin, TimestampMixin):
     description: Mapped[str | None] = mapped_column(Text)
     status: Mapped[str] = mapped_column(Enum(ProjectStatus), default=ProjectStatus.DRAFT, nullable=False)
 
-    owner_id: Mapped[str] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    owner: Mapped[User] = relationship()
+    owner_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    owner: Mapped[User] = relationship(back_populates="owned_projects")
 
     evaluations: Mapped[list[Evaluation]] = relationship(back_populates="project")
     datasets: Mapped[list[Dataset]] = relationship(back_populates="project")

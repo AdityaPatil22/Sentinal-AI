@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -29,7 +31,7 @@ class AuthService:
             await self.user_repo.db.execute(select(Role).where(Role.name == RoleEnum.DEVELOPER))
         ).scalar_one_or_none()
         if not role:
-            raise BadRequestError("Default role not configured. Run the seed script first.")
+            raise BadRequestError("Default role not configured")
         user = User(
             email=data.email,
             hashed_password=hash_password(data.password),
@@ -44,7 +46,7 @@ class AuthService:
         payload = decode_token(refresh_token)
         if payload.get("type") != "refresh":
             raise UnauthorizedError("Invalid refresh token")
-        user = await self.user_repo.get_by_email(payload["sub"])
+        user = await self.user_repo.get_by_id_with_role(uuid.UUID(payload["sub"]))
         if not user:
             raise UnauthorizedError("User not found")
         return self._create_tokens(user)

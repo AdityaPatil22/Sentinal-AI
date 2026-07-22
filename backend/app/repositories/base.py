@@ -28,6 +28,13 @@ class BaseRepository(Generic[ModelType]):  # noqa: UP046
         await self.db.refresh(obj)
         return obj
 
+    async def update(self, obj: ModelType, data: dict) -> ModelType:
+        for key, value in data.items():
+            setattr(obj, key, value)
+        await self.db.flush()
+        await self.db.refresh(obj)
+        return obj
+
     async def delete(self, obj: ModelType) -> None:
         await self.db.delete(obj)
         await self.db.flush()

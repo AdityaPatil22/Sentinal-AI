@@ -9,7 +9,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=str(ROOT_DIR / ".env"), env_file_encoding="utf-8", extra="ignore")
 
-    app_env: str = "development"
+    app_env: str = "production"
     app_debug: bool = False
     app_name: str = "sentinel-ai"
 
@@ -23,7 +23,8 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql+asyncpg://sentinel:sentinel@localhost:5432/sentinel_ai"
 
-    redis_url: str = "redis://localhost:6379/0"
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-2.5-flash"
 
     storage_backend: str = "local"
     storage_local_path: str = "./storage"
