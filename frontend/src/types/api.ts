@@ -18,10 +18,14 @@ export interface AuthTokens {
 
 export interface User {
   id: string;
-  email: string;
-  full_name: string;
+  github_username: string;
+  email: string | null;
+  avatar_url: string | null;
   role: string;
-  is_active: boolean;
+}
+
+export interface AuthResponse extends AuthTokens {
+  user: User;
 }
 
 export type ProjectStatus = "draft" | "submitted" | "evaluating" | "evaluated" | "approved" | "rejected";
@@ -44,10 +48,16 @@ export interface Evaluation {
   risk_score: number | null;
   summary: string | null;
   model_name: string | null;
+  node_results: Record<string, unknown> | null;
+  error_message: string | null;
   project_id: string;
   created_at: string;
   updated_at: string;
-  project?: Project;
+}
+
+export interface CreateEvaluationRequest {
+  project_id: string;
+  model_name?: string;
 }
 
 export interface Report {
